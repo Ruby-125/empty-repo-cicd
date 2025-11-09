@@ -3,8 +3,8 @@ name: Build and Push Portfolio Image
 on:
   push:
     branches:
-      - main   # Runs when you push to the main branch
-  workflow_dispatch:  # Also allows manual trigger from GitHub Actions tab
+      - main
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -14,12 +14,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Verify index.html exists
+        run: |
+          if [ ! -f "index.html" ]; then
+            echo "❌ index.html not found!"
+            exit 1
+          fi
+          echo "✅ index.html found!"
+
       - name: Create Dockerfile dynamically
         run: |
           echo "FROM nginx:latest" > Dockerfile
           echo "COPY index.html /usr/share/nginx/html/index.html" >> Dockerfile
           echo "EXPOSE 80" >> Dockerfile
-          echo "Dockerfile created successfully"
           cat Dockerfile
 
       - name: Log in to Docker Hub
