@@ -1,0 +1,37 @@
+name: Build and Push Portfolio Image
+
+on:
+  push:
+    branches:
+      - main   # Runs when you push to the main branch
+  workflow_dispatch:  # Also allows manual trigger from GitHub Actions tab
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create Dockerfile dynamically
+        run: |
+          echo "FROM nginx:latest" > Dockerfile
+          echo "COPY index.html /usr/share/nginx/html/index.html" >> Dockerfile
+          echo "EXPOSE 80" >> Dockerfile
+          echo "Dockerfile created successfully"
+          cat Dockerfile
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t rubeenabegum/pookie-portfolio:v12 .
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push rubeenabegum/pookie-portfolio:v12
