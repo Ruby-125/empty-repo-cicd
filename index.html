@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYPHER - Elite Hacker Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at top, #1a1a1a 0%, #000 100%);
+            z-index: -2;
+        }
+
+        .sprinkle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: 0 0 10px #ffd700;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #ffd700;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            text-shadow: 0 0 20px #ffd700;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .glitch {
+            font-size: 80px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #aaa;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+        }
+
+        .cta-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 100px 50px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 60px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 40px;
+            border-radius: 15px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .card-desc {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .skill-item {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .skill-item:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .skill-name {
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .cube {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            transform-style: preserve-3d;
+            animation: rotate 20s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(50px); }
+        .cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(50px); }
+        .cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(50px); }
+        .cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(50px); }
+        .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(50px); }
+        .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(50px); }
+
+        @keyframes rotate {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: #ffd700;
+            font-size: 24px;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px);
+            text-shadow: 0 0 20px #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <nav>
+        <div class="logo">CYPHER</div>
+        <div class="nav-links">
+            <a href="#home">HOME</a>
+            <a href="#services">SERVICES</a>
+            <a href="#skills">SKILLS</a>
+            <a href="#contact">CONTACT</a>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="glitch">ELITE HACKER</h1>
+            <p class="subtitle">CYBERSECURITY SPECIALIST & PENETRATION TESTER</p>
+            <button class="cta-btn">EXPLORE MY WORK</button>
+        </div>
+        <div class="cube" style="top: 10%; left: 10%;">
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+        </div>
+        <div class="cube" style="bottom: 10%; right: 10%;">
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+            <div class="cube-face"></div>
+        </div>
+    </section>
+
+    <section id="services" class="section">
+        <h2 class="section-title">SERVICES</h2>
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-icon">🛡️</div>
+                <h3 class="card-title">PENETRATION TESTING</h3>
+                <p class="card-desc">Comprehensive security assessments to identify vulnerabilities in your systems before malicious actors do.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔐</div>
+                <h3 class="card-title">SECURITY AUDITS</h3>
+                <p class="card-desc">In-depth analysis of your security infrastructure with detailed reports and remediation strategies.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">💻</div>
+                <h3 class="card-title">ETHICAL HACKING</h3>
+                <p class="card-desc">White-hat hacking services to strengthen your defenses through controlled attack simulations.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔍</div>
+                <h3 class="card-title">THREAT ANALYSIS</h3>
+                <p class="card-desc">Real-time monitoring and analysis of potential security threats to your digital assets.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌐</div>
+                <h3 class="card-title">NETWORK SECURITY</h3>
+                <p class="card-desc">Design and implementation of robust network security architectures and protocols.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📱</div>
+                <h3 class="card-title">APP SECURITY</h3>
+                <p class="card-desc">Mobile and web application security testing to ensure your software is bulletproof.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="section">
+        <h2 class="section-title">EXPERTISE</h2>
+        <div class="skills-grid">
+            <div class="skill-item">
+                <div class="skill-name">PYTHON</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">KALI LINUX</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">METASPLOIT</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">BURP SUITE</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">WIRESHARK</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">NMAP</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">SQL INJECTION</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">XSS</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">CRYPTOGRAPHY</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">REVERSE ENG.</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">OSINT</div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">FORENSICS</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <h2 class="section-title">GET IN TOUCH</h2>
+        <form class="contact-form">
+            <div class="form-group">
+                <input type="text" placeholder="YOUR NAME" required>
+            </div>
+            <div class="form-group">
+                <input type="email" placeholder="YOUR EMAIL" required>
+            </div>
+            <div class="form-group">
+                <textarea placeholder="YOUR MESSAGE" required></textarea>
+            </div>
+            <button type="submit" class="cta-btn">SEND MESSAGE</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 CYPHER. All Rights Reserved.</p>
+        <div class="social-links">
+            <a href="#">GITHUB</a>
+            <a href="#">TWITTER</a>
+            <a href="#">LINKEDIN</a>
+        </div>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Create sprinkles
+        function createSprinkles() {
+            for (let i = 0; i < 50; i++) {
+                const sprinkle = document.createElement('div');
+                sprinkle.className = 'sprinkle';
+                sprinkle.style.left = Math.random() * 100 + '%';
+                sprinkle.style.top = Math.random() * 100 + '%';
+                document.body.appendChild(sprinkle);
+
+                gsap.to(sprinkle, {
+                    y: '+=100',
+                    x: '+=50',
+                    opacity: 0,
+                    duration: 2 + Math.random() * 3,
+                    repeat: -1,
+                    delay: Math.random() * 2,
+                    ease: 'none'
+                });
+            }
+        }
+
+        createSprinkles();
+
+        // Hero animations
+        gsap.from('.glitch', {
+            duration: 1,
+            y: -100,
+            opacity: 0,
+            ease: 'bounce.out'
+        });
+
+        gsap.from('.subtitle', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            delay: 0.3,
+            ease: 'power2.out'
+        });
+
+        gsap.from('.cta-btn', {
+            duration: 1,
+            scale: 0,
+            opacity: 0,
+            delay: 0.6,
+            ease: 'back.out(1.7)'
+        });
+
+        // Card animations
+        gsap.utils.toArray('.card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 100,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.1,
+                ease: 'power3.out'
+            });
+        });
+
+        // Skills animation
+        gsap.utils.toArray('.skill-item').forEach((skill, i) => {
+            gsap.from(skill, {
+                scrollTrigger: {
+                    trigger: skill,
+                    start: 'top 85%',
+                    toggleActions: 'play none none reverse'
+                },
+                scale: 0,
+                opacity: 0,
+                duration: 0.5,
+                delay: i * 0.05,
+                ease: 'back.out(1.7)'
+            });
+        });
+
+        // Form animation
+        gsap.from('.contact-form', {
+            scrollTrigger: {
+                trigger: '.contact-form',
+                start: 'top 80%',
+                toggleActions: 'play none none reverse'
+            },
+            y: 100,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+
+        // Button hover effect
+        document.querySelectorAll('.cta-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                gsap.to(this, {
+                    scale: 1.05,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+            });
+
+            btn.addEventListener('mouseleave', function() {
+                gsap.to(this, {
+                    scale: 1,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+            });
+        });
+
+        // Glitch effect on title
+        setInterval(() => {
+            const glitch = document.querySelector('.glitch');
+            glitch.style.textShadow = `
+                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 #ffd700,
+                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 #ffed4e
+            `;
+            setTimeout(() => {
+                glitch.style.textShadow = 'none';
+            }, 50);
+        }, 3000);
+
+        // Mouse trail effect
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.9) {
+                const trail = document.createElement('div');
+                trail.className = 'sprinkle';
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                document.body.appendChild(trail);
+
+                gsap.to(trail, {
+                    y: 30,
+                    opacity: 0,
+                    duration: 1,
+                    onComplete: () => trail.remove()
+                });
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    gsap.to(window, {
+                        duration: 1,
+                        scrollTo: target,
+                        ease: 'power2.inOut'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect for cubes
+        gsap.utils.toArray('.cube').forEach(cube => {
+            gsap.to(cube, {
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                },
+                y: 300,
+                rotation: 360,
+                ease: 'none'
+            });
+        });
+    </script>
+</body>
+</html>
